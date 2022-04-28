@@ -1,0 +1,70 @@
+
+Overview
+********
+Client and Server code to process hCaptcha responses.
+
+Requires a hCaptcha account to be configured for your domain. See:
+ - [hCaptcha Docs]`https://docs.hcaptcha.com/`
+ - [hCaptcha Dashboard]`https://dashboard.hcaptcha.com/`
+
+
+
+Quick Start
+***********
+Client side code:
+
+pre>
+syntax: fantom
+using afHcaptcha::CaptchaClient
+
+...
+
+siteKey  := "..."    // siteKey = your unique hCaptcha key
+enabled  := true     // enabled = false to disable hCaptcha during dev
+captcha  := captchaClient(siteKey, enabled)
+
+...
+
+containerId := "divId"  // id of where hCaptcha is to be rendered
+captchaId   := captcha.render(containerId)
+
+...
+
+response    := captcha.getResponse(captchaId)
+if (response == null)
+    Win.cur.alert("If you're a human, complete the captcha!")
+else
+    // set a hidden form value to send response to the Server
+    doc.elemById("captchaInput").setAttr("value", response)
+<pre
+
+Then when processing form values on the server:
+
+pre>
+syntax: fantom
+using afIoc::Inject
+using afBedSheet::HttpRequest
+using afEfanXtra::BeforeRender
+using afHcaptcha::CaptchaServer
+...
+
+@Inject const HttpRequest    httpReq
+@Inject const CaptchaServer  captcha
+
+@BeforeRender
+Void onBeforeRender() {
+    // inject hCaptcha scripts into the page
+    captcha.injectJsCaptcha()
+}
+
+Void onProcessForm() {
+    // grab the hCaptcha response from the client form
+    response := httpReq.body.form["captchaInput"]
+
+    // verify it on the hCaptcha server
+    success  := captcha.verifyCaptcha(response, false)
+    if (success == false)
+        throw Err("Captcha failed")
+}
+<pre
+
