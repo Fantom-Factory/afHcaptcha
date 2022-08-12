@@ -2,6 +2,10 @@
 v0.0 [#v0.0]
 ****
 
+v0.0.4 [#v0.0.4]
+======
+ - Chg: Treat the 'invalid-or-already-seen-response' error code as a capture failure, not an error.
+
 v0.0.2 [#v0.0.2]
 ======
  - New: Initial release.

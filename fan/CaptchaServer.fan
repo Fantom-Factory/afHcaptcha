@@ -63,11 +63,12 @@ const class CaptchaServer {
 			log.info("hCaptcha Stub - " + (resp["success"] ? "Success!" : "Fail") + " - $response")
 		}
 
-		if (resp.containsKey("error-codes") && resp["error-codes"] != null)
+		errorCodes := resp["error-codes"]
+		if (errorCodes != null && errorCodes != "invalid-or-already-seen-response")
 			// generally error-codes mean I've done something wrong and the request / token is invalid
 			// Bad hCaptcha response - [missing-input-secret]
 			// https://docs.hcaptcha.com/#siteverify-error-codes-table
-			throw Err("Bad hCaptcha response - " + resp["error-codes"])
+			throw Err("Bad hCaptcha response - ${errorCodes}")
 		
 		success := resp["success"]
 		if (!success && checked)
