@@ -5,7 +5,7 @@ class Build : BuildPod {
 	new make() {
 		podName = "afHcaptcha"
 		summary = "Client and Server code to process hCaptcha challenges"
-		version = Version("0.0.4")
+		version = Version("0.0.5")
 
 		meta = [
 			"pod.dis"		: "hCaptcha",
