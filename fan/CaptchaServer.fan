@@ -63,12 +63,16 @@ const class CaptchaServer {
 			log.info("hCaptcha Stub - " + (resp["success"] ? "Success!" : "Fail") + " - $response")
 		}
 
-		errorCodes := resp["error-codes"]
-		if (errorCodes != null && errorCodes != "invalid-or-already-seen-response")
-			// generally error-codes mean I've done something wrong and the request / token is invalid
-			// Bad hCaptcha response - [missing-input-secret]
-			// https://docs.hcaptcha.com/#siteverify-error-codes-table
-			throw Err("Bad hCaptcha response - ${errorCodes}")
+		errorCodes := resp["error-codes"] as Str[]
+		if (errorCodes != null) {
+			if (errorCodes.size == 0 && (errorCodes.first == "invalid-or-already-seen-response" || errorCodes.first == "sitekey-secret-mismatch"))
+				{ }	// ignore intermittent hCapture errors that the user can't do anything about
+			else
+				// generally error-codes mean I've done something wrong and the request / token is invalid
+				// e.g. Bad hCaptcha response - [missing-input-secret]
+				// https://docs.hcaptcha.com/#siteverify-error-codes-table
+				throw Err("Bad hCaptcha response - ${errorCodes}")
+		}
 		
 		success := resp["success"]
 		if (!success && checked)
