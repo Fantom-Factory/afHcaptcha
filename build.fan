@@ -26,5 +26,6 @@ class Build : BuildPod {
 		srcDirs = [`fan/`]
 		resDirs = [`doc/`]
 		jsDirs  = [`js/`]
+		javaDirs= [`java/`]
 	}
 }
