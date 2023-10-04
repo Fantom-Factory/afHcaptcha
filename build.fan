@@ -5,7 +5,7 @@ class Build : BuildPod {
 	new make() {
 		podName = "afHcaptcha"
 		summary = "Client and Server code to process hCaptcha challenges"
-		version = Version("0.0.9")
+		version = Version("0.0.8")
 
 		meta = [
 			"pod.dis"		: "hCaptcha",
@@ -18,6 +18,7 @@ class Build : BuildPod {
 		depends = [
 			// ---- Fantom Core -----------------
 			"sys          1.0.73 - 1.0",
+			"concurrent   1.0.73 - 1.0",
 			"dom          1.0.73 - 1.0",
 			"web          1.0.73 - 1.0",
 			"util         1.0.73 - 1.0",

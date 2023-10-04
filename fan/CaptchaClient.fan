@@ -1,6 +1,9 @@
 using dom::Win
+using concurrent::AtomicRef
 
 @Js class CaptchaClient {
+	private static const AtomicRef responseStubRef := AtomicRef()
+
 	private Bool	enabled
 	private Str		siteKey
 	private |->|[]	messageQueue	:= |->|[,]
@@ -36,15 +39,28 @@ using dom::Win
 	}
 	
 	Void reset(Str widgetId) {
+		responseStubRef.val = null
 		if (enabled)
 			call |->| { doReset(widgetIds[widgetId]) }		
 	}
 	
+	** Use in testing to set a stubbed response to be validated by the server.
+	** Valid codes accepted by CaptchaServer are:
+	**  - '<fail>'
+	**  - '<error>'
+	**  - '<success>'
+	** 
+	** Only works when hCapture is **not** enabled.
+	static Void setResponse(Str? response) {
+		responseStubRef.val = response
+	}
+	
+	** Returns the result of the user completing hCapture puzzles.
 	Str? getResponse(Str widgetId) {
 		if (!enabled)
-			return "<hcaptcha-not-enabled>"
+			return responseStubRef.val ?: "<hcaptcha-not-enabled>"
 		if (!hasLoaded)
-			throw Err("hCaptcha has not loaded")
+			throw Err("hCaptcha JS library has not loaded")
 		return widgetResponses[widgetIds[widgetId]]
 	}
 	
