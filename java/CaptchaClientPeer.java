@@ -7,7 +7,7 @@ import fanx.interop.*;
 public class CaptchaClientPeer {
 
 	private	CaptchaClient	self;
-	
+
 	public CaptchaClientPeer(CaptchaClient self) {
 		this.self = self;
 	}
@@ -15,9 +15,9 @@ public class CaptchaClientPeer {
 	public static CaptchaClientPeer make(CaptchaClient fan) {
 		return new CaptchaClientPeer(fan);
 	}
-	
-	public void iAmHere() { }
-	public boolean hasLoaded() { return false; }
-	public String doRender(String containerId, Map params) { return ""; }
-	public void doReset(String widgetId) { }
-}	
+
+	public void iAmHere(CaptchaClient self) { }
+	public boolean hasLoaded(CaptchaClient self) { return true; }
+	public String doRender(CaptchaClient self, String containerId, Map params) { return ""; }
+	public void doReset(CaptchaClient self, String widgetId) { }
+}
